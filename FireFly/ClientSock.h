@@ -7,12 +7,13 @@ class ServItem
 public:
 	SOCKET sk;
 	CString ip;
-	CString cmpname;
+	CString ComputerName;
 	DWORD os;
 	UINT memsize;
+	CString sLocation;
 };
 
-extern CArray<ServItem,ServItem&>m_ServArray;
+extern CArray<ServItem,ServItem&>g_ServArray;
 
 
 class CClientSock

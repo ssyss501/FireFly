@@ -5,5 +5,6 @@ public:
 	CCustomFuntion(void);
 	~CCustomFuntion(void);
 	int MyGetTime(CString &CurrentTime);
+	CString MyGetOS(int id);
 };
 

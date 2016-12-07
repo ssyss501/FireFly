@@ -10,7 +10,7 @@ struct COMMAND
 
 struct SYSINFO
 {
-	WCHAR cmpname[40];
+	WCHAR ComputerName[40];
 	UINT memsize;
 	DWORD os;
 };

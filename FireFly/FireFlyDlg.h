@@ -9,6 +9,9 @@
 #include "ClientSock.h"
 using namespace std;
 
+#define WM_ONLINE (WM_USER+100)   //上线
+#define WM_OFFLINE (WM_USER+101)  //下线
+
 // CFireFlyDlg 对话框
 class CFireFlyDlg : public CDialogEx
 {
@@ -50,6 +53,7 @@ private:
 	int m_iListPress;//鼠标按下的Listview项目索引
 	CCustomFuntion m_custom;
 	CRect m_rcTime;
+	BOOL m_bUpdataListView;//是否有主机上下线，需要重绘
 public:
 	
 	CClientSock m_ClientSock;//socket管理类
@@ -62,4 +66,6 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	virtual BOOL OnCommand(WPARAM wParam, LPARAM lParam);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	LRESULT MyOnline(WPARAM wParam,LPARAM lParam); //上线
+	LRESULT MyOffline(WPARAM wParam,LPARAM lParam);//下线
 };

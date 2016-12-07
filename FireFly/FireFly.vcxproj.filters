@@ -82,6 +82,24 @@
     <None Include="res\RemoteCMD.png">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="res\EXE.png">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\File.png">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\ME.png">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Screen.png">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\Service.png">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\SMS.png">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FireFly.h">

