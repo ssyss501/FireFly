@@ -51,6 +51,8 @@ CFireFlyDlg::CFireFlyDlg(CWnd* pParent /*=NULL*/)
 	m_iListHover=-1;
 	m_iListPress=-1;
 	m_bUpdataListView=FALSE;
+	m_Process=NULL;
+
 	m_rcTime.left=270,m_rcTime.top=578,m_rcTime.right=460,m_rcTime.bottom=596;
 	//文件图片管理类的加载方式
 	//pImage=CSkinManager::GetInstance()->GetSkinItem(L"bkg.jpg");
@@ -100,6 +102,7 @@ BEGIN_MESSAGE_MAP(CFireFlyDlg, CDialogEx)
 	ON_WM_TIMER()
 	ON_MESSAGE(WM_ONLINE,&CFireFlyDlg::MyOnline) //自定义上线消息
 	ON_MESSAGE(WM_OFFLINE,&CFireFlyDlg::MyOffline) //自定义下线消息
+	ON_COMMAND(IDC_PROC_MANAGE_BT,&CFireFlyDlg::OnProcess)
 END_MESSAGE_MAP()
 
 
@@ -326,7 +329,7 @@ void CFireFlyDlg::OnPaint()
 	//更新ListView主机列表
 	if(m_bUpdataListView)
 	{
-		for(int i=0;i<g_ServArray.GetSize();i++)
+		for(int i=0;i<g_ServArray.GetSize();i++)//socket数量
 		{
 			CString sIP=g_ServArray.GetAt(i).ip;     //IP
 			CString sComputerName=g_ServArray.GetAt(i).ComputerName; //主机名
@@ -335,22 +338,26 @@ void CFireFlyDlg::OnPaint()
 			sMemory.Format(_T("%d MB"),g_ServArray.GetAt(i).memsize); //内存大小
 			CString sLocation=L"局域网";                              //局域网目前还无法实现
 
-			BottomRect.X=10,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			BottomRect.X=10,BottomRect.Y=REAL(140+23*i),BottomRect.Width=900,TitleRect.Height=23;
 			graphics.DrawString(sIP.GetBuffer(), sIP.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
 
-			BottomRect.X=150,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			BottomRect.X=150,BottomRect.Y=REAL(140+23*i),BottomRect.Width=900,TitleRect.Height=23;
 			graphics.DrawString(sComputerName.GetBuffer(), sComputerName.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
 
-			BottomRect.X=400,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			BottomRect.X=400,BottomRect.Y=REAL(140+23*i),BottomRect.Width=900,TitleRect.Height=23;
 			graphics.DrawString(sOS.GetBuffer(), sOS.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
 
-			BottomRect.X=600,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			BottomRect.X=600,BottomRect.Y=REAL(140+23*i),BottomRect.Width=900,TitleRect.Height=23;
 			graphics.DrawString(sMemory.GetBuffer(), sMemory.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
 
-			BottomRect.X=700,BottomRect.Y=140+23*i,BottomRect.Width=900,TitleRect.Height=23;
+			BottomRect.X=700,BottomRect.Y=REAL(140+23*i),BottomRect.Width=900,TitleRect.Height=23;
 			graphics.DrawString(sLocation.GetBuffer(), sLocation.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
 		}
 	}
+	CString sConut;
+	sConut.Format(L"%d台",g_ServArray.GetSize());
+	BottomRect.X=670,BottomRect.Y=578,BottomRect.Width=80,TitleRect.Height=18;
+	graphics.DrawString(sConut.GetBuffer(), sConut.GetLength(),&font, BottomRect,&stringFormat, &Blackbrush);
 
 	//不调用基类 messagebox在对话框后面？？？
 	CDialogEx::OnPaint();
@@ -492,15 +499,15 @@ int CFireFlyDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
 void CFireFlyDlg::OnMouseMove(UINT nFlags, CPoint point)
 {
-	if(!m_bTracking)
-	{
-		TRACKMOUSEEVENT tme;
-		tme.cbSize=sizeof(TRACKMOUSEEVENT);
-		tme.dwFlags=TME_LEAVE|TME_HOVER;
-		tme.hwndTrack=m_hWnd;
-		tme.dwHoverTime=10;
-		m_bTracking=TRUE;
-	}
+	//if(!m_bTracking)
+	//{
+	//	TRACKMOUSEEVENT tme;
+	//	tme.cbSize=sizeof(TRACKMOUSEEVENT);
+	//	tme.dwFlags=TME_LEAVE|TME_HOVER;
+	//	tme.hwndTrack=m_hWnd;
+	//	tme.dwHoverTime=10;
+	//	m_bTracking=TRUE;
+	//}
 
 	CRect rtButton;
 	//CRect rtWindow;
@@ -682,8 +689,6 @@ BOOL CFireFlyDlg::OnCommand(WPARAM wParam, LPARAM lParam)
 			{
 				MessageBoxW(L"主页",0,0);
 			}
-			break;
-
 	}
 	return CDialogEx::OnCommand(wParam, lParam);
 }
@@ -748,4 +753,27 @@ LRESULT CFireFlyDlg::MyOffline(WPARAM wParam,LPARAM lParam)
 	//}
 
 	return 0;
+}
+
+
+void CFireFlyDlg::OnProcess()
+{
+	//ListView索引值不能大于主机数
+	if(m_iListPress>g_ServArray.GetSize()-1)
+	{
+		MessageBoxW(L"请选择有效的主机！");
+		return;
+	}
+	if(m_Process==NULL)
+	{
+		m_Process=new CProcess(this,g_ServArray.GetAt(m_iListPress).sk);
+		m_Process->Create(IDD_PROCESS);
+		m_Process->ShowWindow(SW_SHOW);
+	}
+}
+
+void CFireFlyDlg:: MyDeleteProcess()
+{
+	delete m_Process;
+	m_Process=NULL;
 }

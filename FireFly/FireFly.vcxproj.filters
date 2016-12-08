@@ -138,6 +138,9 @@
     <ClInclude Include="GDIButton.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Process.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FireFly.cpp">
@@ -162,6 +165,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="GDIButton.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Process.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

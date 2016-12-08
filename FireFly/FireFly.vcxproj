@@ -132,6 +132,7 @@
     <ClInclude Include="FireFlyDlg.h" />
     <ClInclude Include="MemoryDC.h" />
     <ClInclude Include="MemoryImage.h" />
+    <ClInclude Include="Process.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SkinManager.h" />
     <ClInclude Include="stdafx.h" />
@@ -145,6 +146,7 @@
     <ClCompile Include="FireFly.cpp" />
     <ClCompile Include="FireFlyDlg.cpp" />
     <ClCompile Include="MemoryImage.cpp" />
+    <ClCompile Include="Process.cpp" />
     <ClCompile Include="SkinManager.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -157,4 +159,9 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="FireFly.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

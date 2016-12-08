@@ -7,6 +7,8 @@
 #include "GDIButton.h"
 #include "CustomFuntion.h"
 #include "ClientSock.h"
+
+#include "Process.h"
 using namespace std;
 
 #define WM_ONLINE (WM_USER+100)   //上线
@@ -54,6 +56,7 @@ private:
 	CCustomFuntion m_custom;
 	CRect m_rcTime;
 	BOOL m_bUpdataListView;//是否有主机上下线，需要重绘
+	CProcess* m_Process;    //进程管理对象
 public:
 	
 	CClientSock m_ClientSock;//socket管理类
@@ -68,4 +71,7 @@ public:
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
 	LRESULT MyOnline(WPARAM wParam,LPARAM lParam); //上线
 	LRESULT MyOffline(WPARAM wParam,LPARAM lParam);//下线
+
+	afx_msg void OnProcess();//进程管理
+	void MyDeleteProcess();
 };
