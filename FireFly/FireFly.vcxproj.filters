@@ -100,6 +100,12 @@
     <None Include="res\SMS.png">
       <Filter>资源文件</Filter>
     </None>
+    <None Include="res\MessageBoxDlg.png">
+      <Filter>资源文件</Filter>
+    </None>
+    <None Include="res\MessageBoxButton.png">
+      <Filter>资源文件</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FireFly.h">
@@ -141,6 +147,12 @@
     <ClInclude Include="Process.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MessageBox.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Cmd.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FireFly.cpp">
@@ -168,6 +180,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Process.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MessageBox.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Cmd.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

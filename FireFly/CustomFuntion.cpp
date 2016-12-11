@@ -43,3 +43,18 @@ CString CCustomFuntion::MyGetOS(int id)
 		break;
 	}
 }
+
+CString CCustomFuntion::MyCharToWide(char * ch)
+{
+	wchar_t temp[1024]={0};
+	MultiByteToWideChar(CP_ACP,0,ch,1024,temp,1024);
+	return temp;
+}
+
+
+char * CCustomFuntion::MyWideToChar(CString st)
+{
+	char temp[1204]={0};
+	WideCharToMultiByte(CP_ACP,0,st,1024,temp,1024,NULL,NULL);
+	return temp;
+}

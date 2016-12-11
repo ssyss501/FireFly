@@ -113,6 +113,8 @@
     <None Include="res\MainPage.png" />
     <None Include="res\Max.png" />
     <None Include="res\ME.png" />
+    <None Include="res\MessageBoxButton.png" />
+    <None Include="res\MessageBoxDlg.png" />
     <None Include="res\Min.png" />
     <None Include="res\Normal.png" />
     <None Include="res\ProcManage.png" />
@@ -126,12 +128,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClientSock.h" />
+    <ClInclude Include="Cmd.h" />
     <ClInclude Include="CustomFuntion.h" />
     <ClInclude Include="GDIButton.h" />
     <ClInclude Include="FireFly.h" />
     <ClInclude Include="FireFlyDlg.h" />
     <ClInclude Include="MemoryDC.h" />
     <ClInclude Include="MemoryImage.h" />
+    <ClInclude Include="MessageBox.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SkinManager.h" />
@@ -141,11 +145,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClientSock.cpp" />
+    <ClCompile Include="Cmd.cpp" />
     <ClCompile Include="CustomFuntion.cpp" />
     <ClCompile Include="GDIButton.cpp" />
     <ClCompile Include="FireFly.cpp" />
     <ClCompile Include="FireFlyDlg.cpp" />
     <ClCompile Include="MemoryImage.cpp" />
+    <ClCompile Include="MessageBox.cpp" />
     <ClCompile Include="Process.cpp" />
     <ClCompile Include="SkinManager.cpp" />
     <ClCompile Include="stdafx.cpp">

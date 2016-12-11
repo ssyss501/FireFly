@@ -55,6 +55,21 @@ using namespace std;
 #include "MemoryImage.h"
 /////////////////////////////////我的头文件///////////////////////////////////////////////////////////
 
+#define IDC_BASE      10000
+#define IDC_BKG       IDC_BASE+1
+#define IDC_CLOSE_BT  IDC_BASE+2
+#define IDC_MIN_BT	  IDC_BASE+3
+#define IDC_SET_BT	  IDC_BASE+4
+#define IDC_MAINPAGE_BT	  IDC_BASE+5  //主页
+#define IDC_PROC_MANAGE_BT  IDC_BASE+6 //进程管理
+#define IDC_REMOTECMD_BT	IDC_BASE+7 //远程CMD
+#define IDC_FILE_BT			IDC_BASE+8 //文件管理
+#define IDC_SERVICE_BT		IDC_BASE+9 //服务管理
+#define IDC_SCREEN_BT		IDC_BASE+10 //屏幕截取
+#define IDC_SMS_BT			IDC_BASE+11 //短信轰炸
+#define IDC_ME_BT			IDC_BASE+12 //关于我
+#define IDC_OK_BT           IDC_BASE+13 //OK按钮
+
 #ifdef _UNICODE
 #if defined _M_IX86
 #pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")

