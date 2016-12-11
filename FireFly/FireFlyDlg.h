@@ -56,9 +56,8 @@ private:
 	CCustomFuntion m_custom;
 	CRect m_rcTime;
 	BOOL m_bUpdataListView;//是否有主机上下线，需要重绘
-	CProcess* m_Process;    //进程管理对象
+
 public:
-	
 	CClientSock m_ClientSock;//socket管理类
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnMouseLeave();
@@ -74,4 +73,6 @@ public:
 
 	afx_msg void OnProcess();//进程管理
 	void MyDeleteProcess();
+public:
+	CProcess* m_Process;    //进程管理对象
 };

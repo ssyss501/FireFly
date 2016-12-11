@@ -759,6 +759,11 @@ LRESULT CFireFlyDlg::MyOffline(WPARAM wParam,LPARAM lParam)
 void CFireFlyDlg::OnProcess()
 {
 	//ListView索引值不能大于主机数
+	if(m_iListPress==-1)
+	{
+		MessageBoxW(L"当前无在线主机！");
+		return;
+	}
 	if(m_iListPress>g_ServArray.GetSize()-1)
 	{
 		MessageBoxW(L"请选择有效的主机！");

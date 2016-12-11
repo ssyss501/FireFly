@@ -1,6 +1,6 @@
 #pragma once
 #include "afxcmn.h"
-
+#include "sys.h"
 
 // CProcess ¶Ô»°¿ò
 
@@ -29,4 +29,11 @@ public:
 	CListCtrl m_ProcessList;
 	CListCtrl m_ModuleList;
 	virtual void OnCancel();
+	void ProcessComment(COMMAND cmd);
+	void MyShowList(COMMAND cmd);
+	void MyShowModle(COMMAND cmd);
+	afx_msg void OnNMRClickProcessList(NMHDR *pNMHDR, LRESULT *pResult);
+	afx_msg void OnExitprocess();
+	afx_msg void OnModulelist();
+	afx_msg void OnRefresh();
 };

