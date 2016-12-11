@@ -223,11 +223,11 @@ void CMessageBox::OnPaint()
 
 	//绘制 确定 文字
 	CString Correct=L"确定";
-	TitleRect.X=weight/2-30+15, TitleRect.Y=height-45; TitleRect.Width = 60; TitleRect.Height = 30;
+	TitleRect.X=(REAL)weight/2-30+15, TitleRect.Y=(REAL)height-45; TitleRect.Width = (REAL)60; TitleRect.Height = (REAL)30;
 	graphics.DrawString(Correct.GetBuffer(), Correct.GetLength(),&font, TitleRect,&stringFormat, &brush);
 
 	//绘制 对话框内容
-	TitleRect.X=5, TitleRect.Y=height/2; TitleRect.Width = weight; TitleRect.Height = height/4;
+	TitleRect.X=(REAL)5, TitleRect.Y=(REAL)height/2; TitleRect.Width = (REAL)weight; TitleRect.Height = (REAL)height/4;
 	graphics.DrawString(str.GetBuffer(), str.GetLength(),&font, TitleRect,&stringFormat, &brush);
 
 }

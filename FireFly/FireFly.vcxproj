@@ -96,6 +96,8 @@
   <ItemGroup>
     <None Include="ReadMe.txt" />
     <None Include="res\bkg.png" />
+    <None Include="res\BoomBkg.png" />
+    <None Include="res\BoomButton.png" />
     <None Include="res\BottmEdge.png" />
     <None Include="res\Close.png" />
     <None Include="res\EXE.png" />
@@ -138,7 +140,10 @@
     <ClInclude Include="MessageBox.h" />
     <ClInclude Include="Process.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="SendSms.h" />
+    <ClInclude Include="Service.h" />
     <ClInclude Include="SkinManager.h" />
+    <ClInclude Include="SmsBoom.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="sys.h" />
     <ClInclude Include="targetver.h" />
@@ -153,7 +158,10 @@
     <ClCompile Include="MemoryImage.cpp" />
     <ClCompile Include="MessageBox.cpp" />
     <ClCompile Include="Process.cpp" />
+    <ClCompile Include="SendSms.cpp" />
+    <ClCompile Include="Service.cpp" />
     <ClCompile Include="SkinManager.cpp" />
+    <ClCompile Include="SmsBoom.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

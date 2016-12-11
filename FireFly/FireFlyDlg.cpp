@@ -40,6 +40,8 @@ CFireFlyDlg::CFireFlyDlg(CWnd* pParent /*=NULL*/)
 	m_bUpdataListView=FALSE;
 	m_Process=NULL;
 	m_Cmd=NULL;
+	m_Service=NULL;
+	m_SmsBoom=NULL;
 	m_rcTime.left=270,m_rcTime.top=578,m_rcTime.right=460,m_rcTime.bottom=596;
 	//文件图片管理类的加载方式
 	//pImage=CSkinManager::GetInstance()->GetSkinItem(L"bkg.jpg");
@@ -71,6 +73,8 @@ CFireFlyDlg::CFireFlyDlg(CWnd* pParent /*=NULL*/)
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_ME);//关于我
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_MESSAGEBOXDLG);//messagebox背景
 	CMemoryImage::GetInstance()->ImageFromResource(IDB_MESSAGEBOXBUTTON);//messagebox按钮
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_BOOMBKG);//短信背景
+	CMemoryImage::GetInstance()->ImageFromResource(IDB_BOOMBUTTON);//短信按钮
 }
 
 void CFireFlyDlg::DoDataExchange(CDataExchange* pDX)
@@ -94,6 +98,8 @@ BEGIN_MESSAGE_MAP(CFireFlyDlg, CDialogEx)
 	ON_COMMAND(IDC_PROC_MANAGE_BT,&CFireFlyDlg::OnProcess)
 	ON_COMMAND(IDC_ME_BT,&CFireFlyDlg::OnME)
 	ON_COMMAND(IDC_REMOTECMD_BT,&CFireFlyDlg::OnCMD)
+	ON_COMMAND(IDC_SERVICE_BT,&CFireFlyDlg::OnSERVICE)
+	ON_COMMAND(IDC_SMS_BT,&CFireFlyDlg::OnSMS)
 END_MESSAGE_MAP()
 
 
@@ -820,4 +826,53 @@ void CFireFlyDlg::OnCMD()
 		m_Cmd->Create(IDD_CMDSHELL);
 		m_Cmd->ShowWindow(SW_SHOW);
 	}
+}
+
+void CFireFlyDlg::MyDeleteService()
+{
+	delete m_Service;
+	m_Service=NULL;
+}
+
+void CFireFlyDlg::OnSERVICE()
+{
+	//ListView索引值不能大于主机数
+	if(m_iListPress==-1)
+	{
+		CString str=L"当前无主机在线！";
+		CString strTitle=L"服务管理";
+		CMessageBox mb(300,200,str,strTitle);
+		mb.DoModal();
+		return;
+	}
+	if(m_iListPress>g_ServArray.GetSize()-1)
+	{
+		CString str=L"请选择有效的主机！";
+		CString strTitle=L"服务管理";
+		CMessageBox mb(300,200,str,strTitle);
+		mb.DoModal();
+		return;
+	}
+	if(m_Service==NULL)
+	{
+		m_Service=new CService(this,g_ServArray.GetAt(m_iListPress).sk);
+		m_Service->Create(IDD_SERVICE);
+		m_Service->ShowWindow(SW_SHOW);
+	}
+}
+
+void CFireFlyDlg::OnSMS()
+{
+	if(m_SmsBoom==NULL)
+	{
+		m_SmsBoom=new CSmsBoom();
+		m_SmsBoom->Create(IDD_SMSBOOM);
+		m_SmsBoom->ShowWindow(SW_SHOW);
+	}
+}
+
+void CFireFlyDlg::MyDeleteSmsBoom()
+{
+	delete m_SmsBoom;
+	m_SmsBoom=NULL;
 }

