@@ -58,28 +58,28 @@ Image* CMemoryImage::FromResource( UINT uId )
 	HRSRC hRes = ::FindResource( hModule, MAKEINTRESOURCE(uId), _T("PNG"));
 	if( hRes == NULL )
 	{
-		assert(FALSE);
+		//assert(FALSE);
 		return NULL;
 	}
 
 	DWORD dwSize = ::SizeofResource( hModule, hRes); 
 	if( dwSize == 0 )
 	{
-		assert(FALSE);
+		//assert(FALSE);
 		return NULL;
 	}
 
 	HGLOBAL hGlobal = ::LoadResource( hModule, hRes); 
 	if( hGlobal == NULL )
 	{
-		assert(FALSE);
+		//assert(FALSE);
 		return NULL;
 	}
 
 	LPVOID pBuffer = ::LockResource(hGlobal); 
 	if( pBuffer == NULL )
 	{
-		assert(FALSE);
+		//assert(FALSE);
 		::FreeResource(hGlobal); 
 		return NULL;
 	}
@@ -88,7 +88,7 @@ Image* CMemoryImage::FromResource( UINT uId )
 	HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, dwSize);
 	if(hMem == NULL)
 	{
-		assert(FALSE);
+		//assert(FALSE);
 		::FreeResource(hGlobal); 
 		return NULL;
 	}
